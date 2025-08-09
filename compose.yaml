@@ -1,0 +1,7 @@
+﻿services:
+  memeservice:
+    image: memeservice
+    build:
+      context: .
+      dockerfile: MemeService/Dockerfile
+
