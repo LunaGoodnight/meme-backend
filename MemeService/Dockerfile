@@ -1,4 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+ARG APP_UID=1001
+RUN useradd -u $APP_UID appuser
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
