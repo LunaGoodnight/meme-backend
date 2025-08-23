@@ -3,6 +3,7 @@ services:
     build: .
     ports:
       - "5001:80"           # Maps host 5001 to container 80 (Kestrel)
+    env_file: .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=server=db;port=3306;user=root;password=supersecret;database=memes
