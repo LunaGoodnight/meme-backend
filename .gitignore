@@ -341,3 +341,6 @@ Thumbs.db
 
 # Docker
 .dockerignore
+
+# Environment Variables
+.env
