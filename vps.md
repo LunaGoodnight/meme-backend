@@ -14,6 +14,16 @@
 - **Single Nginx Instance**: One Nginx server listens on port 80 (HTTP) for all incoming subdomains.
 - **Reverse Proxying**: Nginx routes subdomains to different projects/services running on unique internal ports.
 
+
+```
+/etc/nginx/sites-available/
+/etc/nginx/sites-enabled/
+```
+
+sites-available: Where all your server blocks (domains) are defined.
+sites-enabled: Where the enabled configs are symlinked for Nginx to use.
+
+
 ### Example Nginx Config
 ```nginx
 server {
@@ -56,6 +66,7 @@ server {
   }
 }
 ```
+
 
 Each block maps a domain to a backend service on a different port.
 
