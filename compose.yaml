@@ -2,7 +2,7 @@ services:
   api:
     build: .
     ports:
-      - "5001:80"           # Maps host 5001 to container 80 (Kestrel)
+      - "5001:8080"           # Maps host 5001 to container 80 (Kestrel)
     env_file: .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
