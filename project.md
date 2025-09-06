@@ -139,4 +139,11 @@ docker-compose logs api
 - (do this in the folder where your backend’s docker-compose.yml is)
 
 
+---
+## **10. Test API**
+
+```bash
+https://api.meme.vividcats.org/api/memes
+```
+
 a different app, Next.js, or .NET, or if you hit any errors or want an even easier “copy-paste” script for new subdomains. You’re doing fantastic! 🚀**
