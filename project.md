@@ -94,17 +94,17 @@ docker-compose up -d --build
 Create a config file for this subdomain:
 
 ```bash
-nano /etc/nginx/sites-available/meme.vividcats.org
+nano /etc/nginx/sites-available/api.meme.vividcats.org
 ```
 Paste this in:
 
 ```nginx
 server {
     listen 80;
-    server_name meme.vividcats.org;
+    server_name api.meme.vividcats.org;
 
     location / {
-        proxy_pass http://localhost:3001;
+        proxy_pass http://localhost:5001;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -125,7 +125,7 @@ systemctl reload nginx
 ## **8. Add an SSL Certificate for meme.vividcats.org**
 
 ```bash
-certbot --nginx -d meme.vividcats.org
+certbot --nginx -d api.meme.vividcats.org
 ```
 - Follow the prompts as before.
 

@@ -21,7 +21,8 @@ builder.Services.AddCors(options =>
 // Add Entity Framework
 builder.Services.AddDbContext<MemeContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-    new MySqlServerVersion(new Version(8, 0, 21))));
+    new MySqlServerVersion(new Version(8, 0, 21)),
+    o => o.EnableRetryOnFailure()));
 
 // Configure S3 with settings from environment variables
 builder.Services.AddSingleton<IAmazonS3>(s =>
