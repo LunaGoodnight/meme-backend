@@ -39,6 +39,13 @@ builder.Services.AddSingleton<IAmazonS3>(s =>
 
 var app = builder.Build();
 
+// Apply database migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<MemeContext>();
+    context.Database.Migrate();
+}
+
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 app.UseRouting();
