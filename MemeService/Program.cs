@@ -1,5 +1,6 @@
 using Amazon.S3;
 using MemeService.Data;
+using MemeService.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,9 +28,15 @@ builder.Services.AddDbContext<MemeContext>(options =>
 // Configure S3 with settings from environment variables
 builder.Services.AddSingleton<IAmazonS3>(s =>
 {
-    var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY") ?? builder.Configuration["AWS:AccessKey"];
-    var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY") ?? builder.Configuration["AWS:SecretKey"];
-    var serviceUrl = Environment.GetEnvironmentVariable("AWS_SERVICE_URL") ?? builder.Configuration["AWS:ServiceURL"];
+    var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY") ?? 
+                   Environment.GetEnvironmentVariable("AWS__AccessKey") ?? 
+                   builder.Configuration["AWS:AccessKey"];
+    var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY") ?? 
+                   Environment.GetEnvironmentVariable("AWS__SecretKey") ?? 
+                   builder.Configuration["AWS:SecretKey"];
+    var serviceUrl = Environment.GetEnvironmentVariable("AWS_SERVICE_URL") ?? 
+                    Environment.GetEnvironmentVariable("AWS__ServiceURL") ?? 
+                    builder.Configuration["AWS:ServiceURL"];
     
     return new AmazonS3Client(accessKey, secretKey, new AmazonS3Config
     {
@@ -37,6 +44,9 @@ builder.Services.AddSingleton<IAmazonS3>(s =>
         ForcePathStyle = true
     });
 });
+
+// Register image upload service
+builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 
 var app = builder.Build();
 
