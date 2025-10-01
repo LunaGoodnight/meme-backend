@@ -34,6 +34,7 @@ public class MemesController : ControllerBase
         return meme == null ? NotFound() : meme;
     }
 
+
     // POST: api/memes/upload
     [HttpPost("upload")]
     public async Task<ActionResult<Meme>> UploadMeme([FromForm] IFormFile imageFile, [FromForm] string keywords = "")
@@ -41,18 +42,18 @@ public class MemesController : ControllerBase
         try
         {
             var imageUrl = await _imageUploadService.UploadImageAsync(imageFile);
-            
+
             var meme = new Meme
             {
                 ImageUrl = imageUrl,
-                Keywords = string.IsNullOrEmpty(keywords) 
-                    ? new List<string>() 
+                Keywords = string.IsNullOrEmpty(keywords)
+                    ? new List<string>()
                     : keywords.Split(',').Select(k => k.Trim()).Take(10).ToList()
             };
 
             _context.Memes.Add(meme);
             await _context.SaveChangesAsync();
-            
+
             return CreatedAtAction(nameof(GetMeme), new { id = meme.Id }, meme);
         }
         catch (ArgumentException ex)

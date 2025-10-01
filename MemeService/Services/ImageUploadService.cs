@@ -80,8 +80,16 @@ public class ImageUploadService : IImageUploadService
     private string GenerateUniqueFileName(string originalFileName)
     {
         var extension = Path.GetExtension(originalFileName);
-        var fileName = $"{Guid.NewGuid()}{extension}";
+        var fileName = $"{GenerateShortId()}{extension}";
         return fileName;
+    }
+
+    private string GenerateShortId()
+    {
+        const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+        var random = new Random();
+        return new string(Enumerable.Repeat(chars, 8)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
     private string ExtractKeyFromUrl(string imageUrl)

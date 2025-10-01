@@ -5,7 +5,7 @@ namespace MemeService.Models;
 public class Meme
 {
     public int Id { get; set; }
-    
+
     [Required(ErrorMessage = "Image URL is required")]
     [Url(ErrorMessage = "Invalid URL format")]
     [MaxLength(2000, ErrorMessage = "URL cannot exceed 2000 characters")]
