@@ -13,7 +13,10 @@ public class ImageUploadService : IImageUploadService
     {
         _s3Client = s3Client;
         _configuration = configuration;
-        _bucketName = ""; // Default based on your current setup
+        _bucketName = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME") ?? 
+                     Environment.GetEnvironmentVariable("AWS__BucketName") ?? 
+                     configuration["AWS:BucketName"] ?? 
+                     "m"; // Default based on your current setup
     }
 
     public async Task<string> UploadImageAsync(IFormFile imageFile)
@@ -38,7 +41,7 @@ public class ImageUploadService : IImageUploadService
 
         await _s3Client.PutObjectAsync(request);
 
-        return $"https://i.vividcats.org/{key}";
+        return $"https://i.vividcats.org/{_bucketName}/{key}";
     }
 
     public async Task<bool> DeleteImageAsync(string imageUrl)
