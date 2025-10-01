@@ -16,7 +16,7 @@ public class ImageUploadService : IImageUploadService
         _bucketName = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME") ?? 
                      Environment.GetEnvironmentVariable("AWS__BucketName") ?? 
                      configuration["AWS:BucketName"] ?? 
-                     "cute33"; // Default based on your current setup
+                     "m"; // Default based on your current setup
     }
 
     public async Task<string> UploadImageAsync(IFormFile imageFile)
