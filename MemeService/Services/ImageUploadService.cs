@@ -26,10 +26,10 @@ public class ImageUploadService : IImageUploadService
 
         ValidateImageFile(imageFile);
 
-        var key = GenerateUniqueFileName(imageFile.FileName);
-        
+        var key = GenerateUniqueFileName(imageFile.FileName, imageFile.ContentType);
+
         using var stream = imageFile.OpenReadStream();
-        
+
         var request = new PutObjectRequest
         {
             BucketName = _bucketName,
@@ -40,7 +40,7 @@ public class ImageUploadService : IImageUploadService
         };
 
         await _s3Client.PutObjectAsync(request);
-        
+
         return $"https://i.vividcats.org/{_bucketName}/{key}";
     }
 
@@ -77,11 +77,31 @@ public class ImageUploadService : IImageUploadService
             throw new ArgumentException("Image size cannot exceed 10MB");
     }
 
-    private string GenerateUniqueFileName(string originalFileName)
+    private string GenerateUniqueFileName(string originalFileName, string contentType)
     {
         var extension = Path.GetExtension(originalFileName);
+
+        // If no extension found in filename, derive it from content type
+        if (string.IsNullOrEmpty(extension))
+        {
+            extension = GetExtensionFromContentType(contentType);
+        }
+
         var fileName = $"{GenerateShortId()}{extension}";
         return fileName;
+    }
+
+    private string GetExtensionFromContentType(string contentType)
+    {
+        return contentType.ToLower() switch
+        {
+            "image/jpeg" => ".jpg",
+            "image/jpg" => ".jpg",
+            "image/png" => ".png",
+            "image/gif" => ".gif",
+            "image/webp" => ".webp",
+            _ => ".jpg" // Default to jpg if unknown
+        };
     }
 
     private string GenerateShortId()
