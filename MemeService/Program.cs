@@ -34,14 +34,14 @@ builder.Services.AddSingleton<IAmazonS3>(s =>
     var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY") ?? 
                    Environment.GetEnvironmentVariable("AWS__SecretKey") ?? 
                    builder.Configuration["AWS:SecretKey"];
-    var serviceUrl = Environment.GetEnvironmentVariable("AWS_SERVICE_URL") ?? 
-                    Environment.GetEnvironmentVariable("AWS__ServiceURL") ?? 
+    var serviceUrl = Environment.GetEnvironmentVariable("AWS_SERVICE_URL") ??
+                    Environment.GetEnvironmentVariable("AWS__ServiceURL") ??
                     builder.Configuration["AWS:ServiceURL"];
-    
+
     return new AmazonS3Client(accessKey, secretKey, new AmazonS3Config
     {
         ServiceURL = serviceUrl,
-        ForcePathStyle = true
+        ForcePathStyle = false
     });
 });
 

@@ -41,7 +41,7 @@ public class ImageUploadService : IImageUploadService
 
         await _s3Client.PutObjectAsync(request);
 
-        return $"https://i.vividcats.org/{_bucketName}/{key}";
+        return $"https://i.vividcats.org/{key}";
     }
 
     public async Task<bool> DeleteImageAsync(string imageUrl)
