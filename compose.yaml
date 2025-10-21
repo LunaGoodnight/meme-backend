@@ -1,25 +1,60 @@
 services:
   api:
     build: .
+    container_name: meme-api
+    restart: unless-stopped
     ports:
       - "5001:8080"           # Maps host 5001 to container 8080 (Kestrel)
     env_file: .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=server=db;port=3306;user=root;password=supersecret;database=memes
+      - ConnectionStrings__DefaultConnection=server=db;port=3306;user=${MYSQL_USER};password=${MYSQL_PASSWORD};database=${MYSQL_DATABASE}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    networks:
+      - meme-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
 
   db:
     image: mysql:8.4
-    restart: always
+    container_name: meme-db
+    restart: unless-stopped
+    env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: supersecret
-      MYSQL_DATABASE: memes
-    ports:
-      - "3307:3306"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - meme_db_data:/var/lib/mysql
+    networks:
+      - meme-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+networks:
+  meme-network:
+    driver: bridge
 
 volumes:
   meme_db_data:
