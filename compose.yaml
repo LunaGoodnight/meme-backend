@@ -4,7 +4,7 @@ services:
     container_name: meme-api
     restart: unless-stopped
     ports:
-      - "5001:8080"           # Maps host 5001 to container 8080 (Kestrel)
+      - "127.0.0.1:5001:8080"     # Maps host 5001 to container 8080 (Kestrel)
     env_file: .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
