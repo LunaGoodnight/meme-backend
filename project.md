@@ -115,7 +115,7 @@ server {
 
 **Enable the site and reload Nginx:**
 ```bash
-ln -s /etc/nginx/sites-available/meme.vividcats.org /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/api.meme.vividcats.org /etc/nginx/sites-enabled/
 nginx -t
 systemctl reload nginx
 ```
