@@ -115,7 +115,7 @@ server {
 
 **Enable the site and reload Nginx:**
 ```bash
-ln -s /etc/nginx/sites-available/api.meme.vividcats.org /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/api.chat.vividcats.org /etc/nginx/sites-enabled/
 nginx -t
 systemctl reload nginx
 ```
@@ -125,7 +125,7 @@ systemctl reload nginx
 ## **8. Add an SSL Certificate for meme.vividcats.org**
 
 ```bash
-certbot --nginx -d api.meme.vividcats.org
+certbot --nginx -d api.chat.vividcats.org
 ```
 - Follow the prompts as before.
 
@@ -143,7 +143,7 @@ docker-compose logs api
 ## **10. Test API**
 
 ```bash
-https://api.meme.vividcats.org/api/memes
+https://api.chat.vividcats.org/api/memes
 ```
 
 a different app, Next.js, or .NET, or if you hit any errors or want an even easier “copy-paste” script for new subdomains. You’re doing fantastic! 🚀**
