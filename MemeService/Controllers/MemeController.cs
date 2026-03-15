@@ -23,8 +23,28 @@ public class MemesController : ControllerBase
 
     // GET: api/memes
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Meme>>> GetMemes() =>
-        await _context.Memes.OrderByDescending(m => m.CreatedAt).ToListAsync();
+    public async Task<ActionResult<object>> GetMemes([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        pageSize = Math.Clamp(pageSize, 1, 50);
+        page = Math.Max(1, page);
+
+        var totalCount = await _context.Memes.CountAsync();
+        var memes = await _context.Memes
+            .OrderByDescending(m => m.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new
+        {
+            data = memes,
+            page,
+            pageSize,
+            totalCount,
+            totalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+            hasMore = page * pageSize < totalCount
+        };
+    }
 
     // GET: api/memes/5
     [HttpGet("{id}")]
