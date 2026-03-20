@@ -21,5 +21,10 @@ RUN dotnet publish "./MemeService.csproj" -c $BUILD_CONFIGURATION -o /app/publis
 
 FROM base AS final
 WORKDIR /app
+
+# Reduce runtime memory on VPS
+ENV DOTNET_gcServer=0
+ENV DOTNET_GCConserveMemory=9
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "MemeService.dll"]
