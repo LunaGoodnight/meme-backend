@@ -22,7 +22,7 @@ public class ImageUploadService : IImageUploadService
     public async Task<string> UploadImageAsync(IFormFile imageFile)
     {
         if (imageFile == null || imageFile.Length == 0)
-            throw new ArgumentException("Image file is required");
+            throw new ArgumentException("Media file is required");
 
         ValidateImageFile(imageFile);
 
@@ -68,24 +68,18 @@ public class ImageUploadService : IImageUploadService
 
     private void ValidateImageFile(IFormFile imageFile)
     {
-        var allowedTypes = new[] { "image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp" };
+        var allowedTypes = new[] { "image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp", "video/mp4" };
         if (!allowedTypes.Contains(imageFile.ContentType.ToLower()))
-            throw new ArgumentException("Only JPEG, PNG, GIF, and WebP images are allowed");
+            throw new ArgumentException("Only JPEG, PNG, GIF, WebP images and MP4 videos are allowed");
 
         const int maxSizeInBytes = 10 * 1024 * 1024; // 10MB
         if (imageFile.Length > maxSizeInBytes)
-            throw new ArgumentException("Image size cannot exceed 10MB");
+            throw new ArgumentException("File size cannot exceed 10MB");
     }
 
     private string GenerateUniqueFileName(string originalFileName, string contentType)
     {
-        var extension = Path.GetExtension(originalFileName);
-
-        // If no extension found in filename, derive it from content type
-        if (string.IsNullOrEmpty(extension))
-        {
-            extension = GetExtensionFromContentType(contentType);
-        }
+        var extension = GetExtensionFromContentType(contentType);
 
         var fileName = $"{GenerateShortId()}{extension}";
         return fileName;
@@ -100,6 +94,7 @@ public class ImageUploadService : IImageUploadService
             "image/png" => ".png",
             "image/gif" => ".gif",
             "image/webp" => ".webp",
+            "video/mp4" => ".mp4",
             _ => ".jpg" // Default to jpg if unknown
         };
     }

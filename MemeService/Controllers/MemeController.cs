@@ -78,11 +78,11 @@ public class MemesController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { error = ex.Message });
         }
         catch (Exception)
         {
-            return StatusCode(500, "An error occurred while uploading the image");
+            return StatusCode(500, new { error = "An error occurred while uploading the media file" });
         }
     }
 
